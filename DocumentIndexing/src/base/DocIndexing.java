@@ -1,9 +1,8 @@
 package base;
 
+import gui.Frame;
+
 import java.util.Hashtable;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;  //notice javax
 
 public class DocIndexing {
 
@@ -11,14 +10,11 @@ public class DocIndexing {
 	
 	public static void main(String[] args)
 	{
-		System.out.println("Hello World");
-		
+		new Frame();
 		//Ciclo le varie directory
 		//per ogni file trovato aggiorno la hashtable
 		
-		
-		
 		//date le parole eseguo le query per determinare in quali documenti sono presenti le varie parole passate
-	}
+	} 
 	
 }
