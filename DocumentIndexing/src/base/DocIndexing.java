@@ -1,6 +1,6 @@
 package base;
 
-import gui.ManagerGUI;
+import gui.Gui;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class DocIndexing {
 
-	private Hashtable<String, String[]> DocIndex = new Hashtable<String, String[]>();
+	private Hashtable<String, List<String>> DocIndex = new Hashtable<String, List<String>>();
 	
 	public int GetNumberOfFiles(String path_origin){
 		File[] files = new File("C:/TestingUniversita").listFiles();
@@ -28,26 +28,26 @@ public class DocIndexing {
 		return numFiles;
 	}
 	
-	public List<String> GetFilesName(String path_origin){
+	public List<File> GetFiles(String path_origin){
 		File[] files = new File("C:/TestingUniversita").listFiles();
-		return GetFilesName(files);
+		return GetFiles(files);
 	}
 	
-	public List<String> GetFilesName(File[] files){
-		List<String> filesName = new ArrayList<String>();
+	public List<File> GetFiles(File[] files){
+		List<File> txtFiles = new ArrayList<File>();
 		for (File file : files) {
 			if(file.isDirectory()){
-				filesName.addAll(GetFilesName(file.listFiles()));
+				txtFiles.addAll(GetFiles(file.listFiles()));
 			}else if(file.getName().contains(".txt")){
-				filesName.add(file.getName());
+				txtFiles.add(file);
 			}
 	    }
-		return filesName;
+		return txtFiles;
 	}
 	
 	public static void main(String[] args)
 	{
-		new ManagerGUI().GenerateGUI();
+		new Gui().GenerateGUI();
 	} 
 	
 }
