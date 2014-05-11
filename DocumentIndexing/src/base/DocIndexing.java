@@ -1,6 +1,6 @@
 package base;
 
-import gui.Frame;
+import gui.ManagerGUI;
 
 import java.util.Hashtable;
 
@@ -10,7 +10,7 @@ public class DocIndexing {
 	
 	public static void main(String[] args)
 	{
-		new Frame();
+		new ManagerGUI();
 		//Ciclo le varie directory
 		//per ogni file trovato aggiorno la hashtable
 		
