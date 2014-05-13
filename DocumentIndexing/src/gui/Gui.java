@@ -10,6 +10,7 @@ import base.DocIndexing;
 import base.Reader;
 import base.Worker;
 
+import java.util.Hashtable;
 import java.util.List;
 
 public class Gui extends JFrame implements ActionListener {
@@ -21,9 +22,10 @@ public class Gui extends JFrame implements ActionListener {
 	JTextArea txtArea = new JTextArea(25,50);
 	JScrollPane resultPnl = new JScrollPane(txtArea);
 	JLabel answer = new JLabel("");
-	
-	public Gui(){
+	private Hashtable<String, List<String>> docIndex;
+	public Gui(Hashtable<String, List<String>> docIndex){
 	    super("GUI"); 
+	    this.docIndex = docIndex;
 	}
 	
 	public void GenerateGUI()
@@ -60,7 +62,7 @@ public class Gui extends JFrame implements ActionListener {
 			txtArea.append("Processori disponibili sulla macchina: " + npa + "\r\n");
 			Worker[] workers = new Worker[npa];
 			for(int i=0;i<workers.length;i++){
-				workers[i]=new Worker("worker"+i);
+				workers[i]=new Worker("worker"+i, docIndex, txtArea);
 				txtArea.append("Creato : worker"+ i + "\r\n");
 			}
 			
@@ -69,10 +71,10 @@ public class Gui extends JFrame implements ActionListener {
 	        }
 			txtArea.append("Assegnati i file trovati ai vari processi\r\n");
 			
-			/*
+			
 			for(int i=0;i<workers.length;i++){
 				workers[i].start();
-			}*/
+			}
 		}
 	}
 }

@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.swing.JTextArea;
+
 public class Worker extends Thread {
 
 	private List<File> listOfFiles = new ArrayList<File>();
-	private Hashtable<String, List<String>> sharedData = new Hashtable<String, List<String>>();
-	
-	public Worker(String name, Hashtable<String,String[]> sharedData){
+	private Hashtable<String, List<String>> sharedData;
+	private JTextArea txtArea;
+	public Worker(String name, Hashtable<String,List<String>> sharedData, JTextArea txtArea){
 		super(name);
+		this.sharedData = sharedData;
+		this.txtArea = txtArea;
 	}
 	
 	public Worker(String name){
@@ -30,13 +34,12 @@ public class Worker extends Thread {
 					//Per ogni linea devo prendere ogni parola
 					String[] words = line.split(" ");
 					for(String word:words){
-						List<String> record=sharedData.get(word);
-						if(record == null){
+						
+						synchronized(sharedData)
+						{
+							List<String> record=sharedData.get(word);
 							record.add(file.getName());
 							sharedData.put(word,record);
-						}else{
-							record.add(file.getName());
-							sharedData.put(word, record);
 						}
 					}
 				}

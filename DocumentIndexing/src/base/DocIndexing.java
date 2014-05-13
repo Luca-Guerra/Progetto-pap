@@ -9,7 +9,7 @@ import java.util.List;
 
 public class DocIndexing {
 
-	private Hashtable<String, List<String>> DocIndex = new Hashtable<String, List<String>>();
+	private static Hashtable<String, List<String>> docIndex = new Hashtable<String, List<String>>();
 	
 	public int GetNumberOfFiles(String path_origin){
 		File[] files = new File("C:/TestingUniversita").listFiles();
@@ -47,7 +47,7 @@ public class DocIndexing {
 	
 	public static void main(String[] args)
 	{
-		new Gui().GenerateGUI();
+		new Gui(docIndex).GenerateGUI();
 	} 
 	
 }
