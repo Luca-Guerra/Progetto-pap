@@ -7,18 +7,18 @@ import java.util.List;
 
 import javax.swing.JTextArea;
 
-public class Worker extends Thread {
+public class Indexer extends Thread {
 
 	private List<File> listOfFiles = new ArrayList<File>();
 	private Hashtable<String, List<String>> sharedData;
 	private JTextArea txtArea;
-	public Worker(String name, Hashtable<String,List<String>> sharedData, JTextArea txtArea){
+	public Indexer(String name, Hashtable<String,List<String>> sharedData, JTextArea txtArea){
 		super(name);
 		this.sharedData = sharedData;
 		this.txtArea = txtArea;
 	}
 	
-	public Worker(String name){
+	public Indexer(String name){
 		super(name);
 	}
 	
@@ -27,7 +27,11 @@ public class Worker extends Thread {
 	}
 	
 	public void run(){
+		if(listOfFiles.size() <= 0){
+			return;
+		}
 		for(File file:listOfFiles){
+			System.out.println(super.getName() + ":Aperto file:" + file.getName());
 			Reader rdr = new Reader(file.getAbsolutePath());
 			try{
 				for(String line : rdr.OpenFile()){
@@ -43,8 +47,7 @@ public class Worker extends Thread {
 						}
 					}
 				}
-			}catch(Exception ex)
-			{
+			}catch(Exception ex){
 				//Do something
 			}
 		}

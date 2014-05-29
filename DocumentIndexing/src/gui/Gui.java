@@ -6,9 +6,10 @@ import java.io.File;
 
 import javax.swing.*;  //notice javax
 
-import base.DocIndexing;
+import base.DocFinder;
+import base.DocHelper;
 import base.Reader;
-import base.Worker;
+import base.Indexer;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -16,27 +17,29 @@ import java.util.List;
 public class Gui extends JFrame implements ActionListener {
 	JPanel panel = new JPanel();
 	JTextField pathFld = new JTextField(20);
-	JButton startBtn = new JButton("Start Indexing");
-	JButton stopBtn = new JButton("Stop Indexing");
-	JButton pauseBtn = new JButton("Pause Indexing");
+	JButton startBtn = new JButton("Start");
+	JButton stopBtn = new JButton("Stop");
+	JButton pauseBtn = new JButton("Pause");
 	JTextArea txtArea = new JTextArea(25,50);
 	JScrollPane resultPnl = new JScrollPane(txtArea);
-	JLabel answer = new JLabel("");
+	JLabel rootPath = new JLabel("path");
 	private Hashtable<String, List<String>> docIndex;
+	
 	public Gui(Hashtable<String, List<String>> docIndex){
-	    super("GUI"); 
+	    super("Document Indexing"); 
 	    this.docIndex = docIndex;
 	}
 	
-	public void GenerateGUI()
+	public void GenerateGUI(DocFinder startListener)
 	{
 		setBounds(100,50,700,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    Container con = this.getContentPane(); 
-	    con.add(panel); 
+	    con.add(panel);
+	    panel.add(rootPath);
 	    panel.add(pathFld);
 	    panel.add(startBtn);
-	    startBtn.addActionListener(this); 
+	    startBtn.addActionListener(startListener); 
 	    panel.add(pauseBtn);
 	    panel.add(stopBtn);
 	    
@@ -53,16 +56,16 @@ public class Gui extends JFrame implements ActionListener {
 		if (source == startBtn)
 		{
 			txtArea.append("===========Inzio indicizzazione=========\r\n");
-			DocIndexing docIndx = new DocIndexing();
+			DocHelper docIndx = new DocHelper();
 			int nFiles = docIndx.GetNumberOfFiles(pathFld.getText());
 			txtArea.append("File txt trovati: " + nFiles + "\r\n");
 			List<File> files = docIndx.GetFiles(pathFld.getText());
 			Runtime runtime = Runtime.getRuntime();
 			int npa = runtime.availableProcessors();
 			txtArea.append("Processori disponibili sulla macchina: " + npa + "\r\n");
-			Worker[] workers = new Worker[npa];
+			Indexer[] workers = new Indexer[npa];
 			for(int i=0;i<workers.length;i++){
-				workers[i]=new Worker("worker"+i, docIndex, txtArea);
+				workers[i]=new Indexer("worker"+i, docIndex, txtArea);
 				txtArea.append("Creato : worker"+ i + "\r\n");
 			}
 			
@@ -71,10 +74,14 @@ public class Gui extends JFrame implements ActionListener {
 	        }
 			txtArea.append("Assegnati i file trovati ai vari processi\r\n");
 			
-			
 			for(int i=0;i<workers.length;i++){
+				txtArea.append("Start : worker"+ i + "\r\n");
 				workers[i].start();
 			}
+		}
+		if(source == stopBtn)
+		{
+			txtArea.append("===========Stop=========\r\n");
 		}
 	}
 }

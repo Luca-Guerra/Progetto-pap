@@ -7,12 +7,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-public class DocIndexing {
+public class DocHelper {
 
-	private static Hashtable<String, List<String>> docIndex = new Hashtable<String, List<String>>();
-	
 	public int GetNumberOfFiles(String path_origin){
-		File[] files = new File("C:/TestingUniversita").listFiles();
+		File[] files = new File(path_origin).listFiles();
 		return GetNumberOfFiles(files);
 	}
 	
@@ -29,12 +27,15 @@ public class DocIndexing {
 	}
 	
 	public List<File> GetFiles(String path_origin){
-		File[] files = new File("C:/TestingUniversita").listFiles();
+		File[] files = new File(path_origin).listFiles();
 		return GetFiles(files);
 	}
 	
 	public List<File> GetFiles(File[] files){
 		List<File> txtFiles = new ArrayList<File>();
+		if(txtFiles.size() <= 0){
+			return new ArrayList<File>();
+		}
 		for (File file : files) {
 			if(file.isDirectory()){
 				txtFiles.addAll(GetFiles(file.listFiles()));
@@ -45,10 +46,6 @@ public class DocIndexing {
 		return txtFiles;
 	}
 	
-	public static void main(String[] args)
-	{
-		new Gui(docIndex).GenerateGUI();
-	} 
-	
+
 }
 	
