@@ -23,12 +23,10 @@ public class Gui extends JFrame {
 	JButton startBtn = new JButton("Start");
 	JButton stopBtn = new JButton("Stop");
 	JButton pauseBtn = new JButton("Pause");
-	JTextArea txtArea = new JTextArea(15,25);
-	JScrollPane resultPnl = new JScrollPane(txtArea);
 	JLabel rootPath = new JLabel("path");
 	JProgressBar progressBar = new JProgressBar(0,100);
 	private Hashtable<String, List<String>> docIndex;
-	DocFinder finderTask = new DocFinder();
+	DocFinder finderTask = null;
 	public Gui(Hashtable<String, List<String>> docIndex){
 	    super("Document Indexing"); 
 	    this.docIndex = docIndex;
@@ -38,7 +36,7 @@ public class Gui extends JFrame {
 	{
 	    startBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
-	    		if(!pause){
+	    		if(!pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){
 	    			finderTask = new DocFinder();
 	    			finderTask.addPropertyChangeListener(new PropertyChangeListener(){
 	    				public void propertyChange(PropertyChangeEvent evt) {
@@ -76,9 +74,7 @@ public class Gui extends JFrame {
 	    panel.add(pauseBtn);
 	    panel.add(stopBtn);
 	    panel.add(progressBar);
-	    panel.add(resultPnl);
 	    
-	    txtArea.setEditable(false);
 	    setVisible(true); 
 	}
 	/*
