@@ -24,10 +24,13 @@ I primi due Task possono essere realizzati in parallelo in maniera concorrente, 
 \section{Soluzione al problema}
 
 Per rendere il sistema più performante, ho deciso di sfruttare una \textbf{BlockingDeque}, questa verrà utilizzata come contenitore dei vari documenti da indicizzare. Il flusso di lavoro darà il seguente: \\
-Allo start dell'indicizzazione avrò un processo che naviga tutto l'albero partendo dalla root ( basta un unico thread, perchè il lavoro di navigare la root sarà molto più veloce del lavoro di indicizzazione) aggiungerà file alla lista, i vari processi indicizzatori rimarranno in attesa di nuovi file, appena questi saranno presenti li prenderanno e inizieranno a indicizzare in una hashtable, in questo caso questa sarà la nostra memoria condivisa, e l'accesso a questa dovrà essere mutualmente esclusivo.
-Per indicizzare nella hashtable avremo la parola come chiave, e come valore una lista di stringhe che conterranno tutti nomi dei documenti che contengono la stringa specificata.\\
-Terminata questa prima parte, il sistema è pronto a rispondere alle varie query e consultando la tabella rispondere velocemente(anche questo verrà fatto da un solo thread).
+Allo start dell'indicizzazione avrò un processo che naviga tutto l'albero partendo dalla root ( basta un unico thread, perchè il lavoro di navigare la root sarà molto più veloce del lavoro di indicizzazione) aggiungerà file alla lista, i vari processi indicizzatori rimarranno in attesa di nuovi file, appena questi saranno presenti li prenderanno e inizieranno a indicizzare in una hashtable, in questa soluzione questa sarà la nostra memoria condivisa, e l'accesso a questa dovrà essere mutualmente esclusivo.
+Per indicizzare nella hashtable avremo la parola trovata come chiave, e come valore una lista di stringhe rappresentanti tutti nomi dei documenti che contengono la parola trovata.\\
+Terminata questa prima parte, il sistema è pronto a rispondere alle varie query consultando la hashtable (anche questo verrà fatto da un solo thread).
 
+\section{implementazione}
+
+Il progetto dovrà avere una sua GUI, per realizzarla sfrutterò la libreria \textit{swing}, 
 \section{Conclusion}
 Write your conclusion here.
 
