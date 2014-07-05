@@ -25,11 +25,9 @@ public class Gui extends JFrame {
 	JButton pauseBtn = new JButton("Pause");
 	JLabel rootPath = new JLabel("path");
 	JProgressBar progressBar = new JProgressBar(0,100);
-	private Hashtable<String, List<String>> docIndex;
 	DocFinder finderTask = null;
-	public Gui(Hashtable<String, List<String>> docIndex){
+	public Gui(){
 	    super("Document Indexing"); 
-	    this.docIndex = docIndex;
 	}
 	
 	public void GenerateGUI()
@@ -37,11 +35,11 @@ public class Gui extends JFrame {
 	    startBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		if(!pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){
-	    			finderTask = new DocFinder();
+	    			finderTask = new DocFinder(pathFld.getText());
 	    			finderTask.addPropertyChangeListener(new PropertyChangeListener(){
 	    				public void propertyChange(PropertyChangeEvent evt) {
 	    					if("progress".equals(evt.getPropertyName()))
-	    					progressBar.setValue((Integer) evt.getNewValue());
+	    						progressBar.setValue((Integer) evt.getNewValue());
 	    				}
 	    		    });
 	    			finderTask.execute();
@@ -77,39 +75,9 @@ public class Gui extends JFrame {
 	    
 	    setVisible(true); 
 	}
-	/*
-	public void actionPerformed(ActionEvent event)
+	
+	public static void main(String[] args)
 	{
-		Object source = event.getSource();
-		if (source == startBtn)
-		{
-			txtArea.append("===========Inzio indicizzazione=========\r\n");
-			DocHelper docHelper = new DocHelper(pathFld.getText());
-			
-			List<File> files = docHelper.GetFiles();
-			Runtime runtime = Runtime.getRuntime();
-			int npa = runtime.availableProcessors();
-			txtArea.append("Processori disponibili sulla macchina: " + npa + "\r\n");
-			Indexer[] workers = new Indexer[npa];
-			for(int i=0;i<workers.length;i++){
-				workers[i]=new Indexer("worker"+i, docIndex, txtArea);
-				txtArea.append("Creato : worker"+ i + "\r\n");
-			}
-			
-			for(int i=0; i<files.size(); i++){
-	        	workers[i%(npa-1)].AddFile(files.get(i));
-	        }
-			txtArea.append("Assegnati i file trovati ai vari processi\r\n");
-			
-			for(int i=0;i<workers.length;i++){
-				txtArea.append("Start : worker"+ i + "\r\n");
-				workers[i].start();
-			}
-		}
-		if(source == stopBtn)
-		{
-			txtArea.append("===========Stop=========\r\n");
-		}
+		new Gui().GenerateGUI();
 	}
-	*/
 }

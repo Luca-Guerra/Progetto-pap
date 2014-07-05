@@ -11,11 +11,9 @@ public class Indexer extends Thread {
 
 	private List<File> listOfFiles = new ArrayList<File>();
 	private Hashtable<String, List<String>> sharedData;
-	private JTextArea txtArea;
-	public Indexer(String name, Hashtable<String,List<String>> sharedData, JTextArea txtArea){
+	public Indexer(String name, Hashtable<String,List<String>> sharedData){
 		super(name);
 		this.sharedData = sharedData;
-		this.txtArea = txtArea;
 	}
 	
 	public Indexer(String name){
@@ -27,9 +25,10 @@ public class Indexer extends Thread {
 	}
 	
 	public void run(){
-		if(listOfFiles.size() <= 0){
+		System.out.println(super.getName() + ":Inizio il lavoro :)");
+		if(listOfFiles.size() <= 0)
 			return;
-		}
+		
 		for(File file:listOfFiles){
 			System.out.println(super.getName() + ":Aperto file:" + file.getName());
 			Reader rdr = new Reader(file.getAbsolutePath());
@@ -37,15 +36,13 @@ public class Indexer extends Thread {
 				for(String line : rdr.OpenFile()){
 					//Per ogni linea devo prendere ogni parola
 					String[] words = line.split(" ");
-					for(String word:words){
-						
+					for(String word:words)
 						synchronized(sharedData)
 						{
 							List<String> record=sharedData.get(word);
 							record.add(file.getName());
 							sharedData.put(word,record);
 						}
-					}
 				}
 			}catch(Exception ex){
 				//Do something
