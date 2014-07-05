@@ -22,7 +22,7 @@ public class Gui extends JFrame {
 	JLabel 		pathlbl  = new JLabel("path");
 	JLabel 		wordlbl  = new JLabel("find");
 	JTable 		table;
-	
+	JScrollPane scrollPanel;
 	JProgressBar progressBar = new JProgressBar(0,100);
 	DocFinder finderTask = null;
 	
@@ -67,32 +67,31 @@ public class Gui extends JFrame {
 	    	public void actionPerformed(ActionEvent e){
 	    		if(Blackboard.enableSearch)
 	    		{
-	    			String[] colNames = {"File", "Occorrenze"};
+	    			String[] colNames = {"File"};
 	    			Object [] [] data;
 	    			String word = wordFld.getText();
 	    			List<String> res = Blackboard.docIndex.get(word);
-	    			data=new Object[res.size()][2];
+	    			
 	    			if(res == null)
 	    				JOptionPane.showMessageDialog(null, "Non è stata trovata nessuna parola! :(");
-	    			else
+	    			else{
+	    				data=new Object[res.size()][1];
+	    				if(scrollPanel != null)
+	    					panel.remove(scrollPanel);
 	    				for(int i =0;i<res.size();i++)
-	    				{
-	    					data[i][0]=(res.get(i) + "\r\n");
-	    					data[i][1]="1";
-	    				}
-	    			
-	    			 table = new JTable(data, colNames);
-	    			 JScrollPane scrollPane = new JScrollPane(table);
-    				 table.setFillsViewportHeight(true);
-	    			 panel.add(scrollPane);
-	    			 panel.add(new JButton("prova"));
-	    			 panel.revalidate();
-	    			 validate();
+	    					data[i][0]=(res.get(i));
+	    				table = new JTable(data, colNames);
+		    			scrollPanel = new JScrollPane(table);
+	    				table.setFillsViewportHeight(true);
+		    			panel.add(scrollPanel);
+	    			}
+	    			panel.revalidate();
+	    			validate();
 	    		}
 	    	}
 	    });
 	    
-	    setBounds(100,50,500,500);
+	    setBounds(100,50,500,600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    Container con = this.getContentPane(); 
 	    con.add(panel);

@@ -37,8 +37,10 @@ public class Indexer extends Thread {
 							List<String> record = Blackboard.docIndex.get(word);
 							if(record == null)
 								record = new ArrayList<String>();
-							record.add(file.getName());
-							Blackboard.docIndex.put(word,record);
+							if(!record.contains(file.getName())){
+								record.add(file.getName());
+								Blackboard.docIndex.put(word,record);
+							}
 							Blackboard.progress++;
 						}
 				}
