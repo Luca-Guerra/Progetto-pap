@@ -2,19 +2,13 @@ package base;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
+import base.DocFinder.Blackboard;
 
-import javax.swing.JTextArea;
 
 public class Indexer extends Thread {
 
 	private List<File> listOfFiles = new ArrayList<File>();
-	private Hashtable<String, List<String>> sharedData;
-	public Indexer(String name, Hashtable<String,List<String>> sharedData){
-		super(name);
-		this.sharedData = sharedData;
-	}
 	
 	public Indexer(String name){
 		super(name);
@@ -25,27 +19,31 @@ public class Indexer extends Thread {
 	}
 	
 	public void run(){
-		System.out.println(super.getName() + ":Inizio il lavoro :)");
 		if(listOfFiles.size() <= 0)
 			return;
 		
+		System.out.println(super.getName() + ":Inizio il lavoro :)");
+		
 		for(File file:listOfFiles){
-			System.out.println(super.getName() + ":Aperto file:" + file.getName());
 			Reader rdr = new Reader(file.getAbsolutePath());
+			System.out.println(super.getName() + ":Aperto file:" + file.getName());
 			try{
 				for(String line : rdr.OpenFile()){
 					//Per ogni linea devo prendere ogni parola
 					String[] words = line.split(" ");
 					for(String word:words)
-						synchronized(sharedData)
+						synchronized(Blackboard.docIndex)
 						{
-							List<String> record=sharedData.get(word);
+							List<String> record = Blackboard.docIndex.get(word);
+							if(record == null)
+								record = new ArrayList<String>();
 							record.add(file.getName());
-							sharedData.put(word,record);
+							Blackboard.docIndex.put(word,record);
+							Blackboard.progress++;
 						}
 				}
 			}catch(Exception ex){
-				//Do something
+				System.out.println(super.getName() + ": :( problema con il file:" + file.getName());
 			}
 		}
 	}
