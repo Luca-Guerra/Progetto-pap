@@ -9,11 +9,11 @@ import java.util.List;
 public class Reader {
 
 	private String path;
-	
+
 	public Reader(String file_path){
 		path = file_path;
 	}
-	
+
 	public List<String> OpenFile() throws IOException{
 		FileReader fr = new FileReader(path);
 		BufferedReader textReader = new BufferedReader(fr);
@@ -25,5 +25,5 @@ public class Reader {
 		textReader.close();
 		return textData;
 	}
-	
+
 }

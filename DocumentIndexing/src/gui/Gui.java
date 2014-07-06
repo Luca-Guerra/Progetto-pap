@@ -4,10 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;  //notice javax
-import base.DocFinder;
-import base.DocFinder.Blackboard;
 
+import javax.swing.*;  //notice javax
+
+import base.ManageIndexer;
+import base.ManageIndexer.Blackboard;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Gui extends JFrame {
@@ -24,7 +27,7 @@ public class Gui extends JFrame {
 	JTable 		table;
 	JScrollPane scrollPanel;
 	JProgressBar progressBar = new JProgressBar(0,100);
-	DocFinder finderTask = null;
+	ManageIndexer finderTask = null;
 	
 	public Gui(){
 	    super("Document Indexing"); 
@@ -36,7 +39,7 @@ public class Gui extends JFrame {
 	    startBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		if(!pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){
-	    			finderTask = new DocFinder(pathFld.getText());
+	    			finderTask = new ManageIndexer(pathFld.getText());
 	    			finderTask.addPropertyChangeListener(new PropertyChangeListener(){
 	    				public void propertyChange(PropertyChangeEvent evt) {
 	    					if("progress".equals(evt.getPropertyName()))
@@ -69,22 +72,29 @@ public class Gui extends JFrame {
 	    		{
 	    			String[] colNames = {"File"};
 	    			Object [] [] data;
-	    			String word = wordFld.getText();
-	    			List<String> res = Blackboard.docIndex.get(word);
+	    			String[] words = wordFld.getText().split(",");
 	    			
-	    			if(res == null)
-	    				JOptionPane.showMessageDialog(null, "Non è stata trovata nessuna parola! :(");
+	    			List<String> res = new ArrayList<String>();
+	    			for(String word:words){
+	    				List<String> files = Blackboard.docIndex.get(word);
+	    				if(files!=null)
+	    					for(String file:files)
+	    						res.add(file);
+	    			}
+	    			if(res.size() == 0)
+	    				JOptionPane.showMessageDialog(null, "Non è stata trovata nessuna occerenza per le parole date");
 	    			else{
 	    				data=new Object[res.size()][1];
 	    				if(scrollPanel != null)
 	    					panel.remove(scrollPanel);
 	    				for(int i =0;i<res.size();i++)
-	    					data[i][0]=(res.get(i));
+	    					data[i][0]=res.get(i);
+	    				
 	    				table = new JTable(data, colNames);
 		    			scrollPanel = new JScrollPane(table);
 	    				table.setFillsViewportHeight(true);
 		    			panel.add(scrollPanel);
-	    			}
+	    			}	    			
 	    			panel.revalidate();
 	    			validate();
 	    		}
