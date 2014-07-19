@@ -26,7 +26,7 @@ public class FileLoader extends Thread {
 				GetFiles(file.listFiles());
 			else if(file.getName().contains(".txt")){
 				Blackboard.filesQueue.put(file);
-				Blackboard.totalfile += GetFileNumWords(file);
+				Blackboard.totalWords += GetFileNumWords(file);
 			}
 	}
 	
@@ -45,20 +45,17 @@ public class FileLoader extends Thread {
 		return n;
 	}
 	
-	
-	
-	
 	public void run()
 	{
-		System.out.println(super.getName() + "Inzio caricamento files.");
-		Blackboard.loaderFinish = false;
+		System.out.println(super.getName() + "Inizio caricamento files.");
 		File[] files = new File(_path).listFiles();
 		try {
 			GetFiles(files);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Blackboard.loaderFinish = true;
+		Blackboard.LoaderFinished = true;
+		Blackboard.FinishToLoad.release();
 		System.out.println(super.getName() + "Fine caricamento files");
 	}
 }

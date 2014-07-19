@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
 
 import base.ManageIndexer.Blackboard;
 
@@ -15,13 +16,23 @@ public class Indexer extends Thread {
 	}
 
 	public void run(){
-	
 		System.out.println(super.getName() + ":Inizio il lavoro :)");
-		
-		while(!(Blackboard.loaderFinish && Blackboard.filesQueue.isEmpty()))
+		while(true){
+			if(Blackboard.pause)
+				try {
+					System.out.println(super.getName() + ":Entro in pausa :)");
+					Blackboard.restartSignal.await();
+					System.out.println(super.getName() + ":Riparto :)");
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			
 			try {
 				File file;
+				if(Blackboard.LoaderFinished && Blackboard.filesQueue.isEmpty())
+					break;
 				file = Blackboard.filesQueue.take();
+				
 				Reader rdr = new Reader(file.getAbsolutePath());
 				System.out.println(super.getName() + ":Aperto file:" + file.getName());
 				try {
@@ -47,12 +58,15 @@ public class Indexer extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		
+		}
 		try {
-			System.out.println(super.getName() + ":Terminato il lavoro :)");
 			Blackboard.indexersBarrier.await();
-		} catch (Exception e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
-		} 
+		} catch (BrokenBarrierException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(super.getName() + ":lavoro finito :)");
 	}
 }

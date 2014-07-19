@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Gui extends JFrame {
-	private boolean pause = false;
 	JPanel 		panel 	 = new JPanel();
 	JTextField 	pathFld  = new JTextField(20);
 	JTextField 	wordFld  = new JTextField(20);
@@ -38,7 +37,7 @@ public class Gui extends JFrame {
 		pathFld.setText("C:\\TestingUniversita");
 	    startBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
-	    		if(!pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){
+	    		if(!Blackboard.pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){
 	    			finderTask = new ManageIndexer(pathFld.getText());
 	    			finderTask.addPropertyChangeListener(new PropertyChangeListener(){
 	    				public void propertyChange(PropertyChangeEvent evt) {
@@ -47,17 +46,19 @@ public class Gui extends JFrame {
 	    				}
 	    		    });
 	    			finderTask.execute();
-	    			pause = false;
+	    			Blackboard.pause = false;
+	    			
 	    		}else{
 	    			finderTask.resume();
-	    			pause = false;
+	    			Blackboard.pause = false;
+	    			Blackboard.restartSignal.countDown();
 	    		}
 	    	}
 	    }); 
 	    pauseBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		finderTask.pause();
-	    		pause = true;
+	    		Blackboard.pause = true;
 	    	}
 	    });
 	    stopBtn.addActionListener(new ActionListener(){
@@ -82,7 +83,7 @@ public class Gui extends JFrame {
 	    						res.add(file);
 	    			}
 	    			if(res.size() == 0)
-	    				JOptionPane.showMessageDialog(null, "Non è stata trovata nessuna occerenza per le parole date");
+	    				JOptionPane.showMessageDialog(null, "Non è stata trovata nessuna occorrenza per le parole date");
 	    			else{
 	    				data=new Object[res.size()][1];
 	    				if(scrollPanel != null)
