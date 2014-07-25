@@ -2,7 +2,6 @@ package base;
 
 import java.io.File;
 
-import base.ManageIndexer.Blackboard;
 
 public class FileLoader extends Thread {
 

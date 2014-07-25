@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
-
-import base.ManageIndexer.Blackboard;
+import gov.nasa.jpf.vm.Verify;
 
 
 public class Indexer extends Thread {
@@ -42,6 +41,7 @@ public class Indexer extends Thread {
 						for(String word:words)
 							synchronized(Blackboard.docIndex)
 							{
+								Verify.beginAtomic();
 								List<String> record = Blackboard.docIndex.get(word);
 								if(record == null)
 									record = new ArrayList<String>();
@@ -50,6 +50,7 @@ public class Indexer extends Thread {
 									Blackboard.docIndex.put(word,record);
 								}
 								Blackboard.progress++;
+								Verify.endAtomic();
 							}
 					}
 				} catch (IOException e) {

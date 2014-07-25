@@ -7,8 +7,8 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.*;  //notice javax
 
+import base.Blackboard;
 import base.ManageIndexer;
-import base.ManageIndexer.Blackboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +38,7 @@ public class Gui extends JFrame {
 	    startBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		if(!Blackboard.pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){
+	    			assert Blackboard.pause = true;
 	    			finderTask = new ManageIndexer(pathFld.getText());
 	    			finderTask.addPropertyChangeListener(new PropertyChangeListener(){
 	    				public void propertyChange(PropertyChangeEvent evt) {
