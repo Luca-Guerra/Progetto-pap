@@ -1,0 +1,32 @@
+package jpf;
+
+import java.io.File;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.Semaphore;
+
+public class BlackboardJPF {
+	public static ExecutorService exec;
+	public static int NTHREADS = 2;
+	public static boolean 				LoaderFinished 	= 	false;
+	public static Semaphore 			StartToLoad 	=	new Semaphore(0,true);
+	public static Semaphore 			FinishToLoad 	= 	new Semaphore(0,true);
+	public static boolean 				pause 			= 	false;
+	public static int 					progress 		= 	0;
+	public static boolean 				enableSearch 	= 	false;
+	public static int 					totalWords		=	0;
+	public static BlockingQueue<Integer>filesQueue 		= 	new LinkedBlockingDeque<Integer>(Integer.MAX_VALUE);
+	public static CyclicBarrier 		indexersBarrier = 	new CyclicBarrier(NTHREADS, new Runnable() {
+																							public void run() { 
+																								exec.shutdown();
+																							}
+															  		  					});
+	public static CountDownLatch 		restartSignal 	= 	new CountDownLatch(1);
+	public static Hashtable<Integer, List<Integer>> docIndex = new Hashtable<Integer, List<Integer>>();
+	
+}
