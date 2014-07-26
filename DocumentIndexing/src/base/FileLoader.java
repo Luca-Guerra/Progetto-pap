@@ -1,6 +1,7 @@
 package base;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class FileLoader extends Thread {
@@ -47,13 +48,20 @@ public class FileLoader extends Thread {
 	public void run()
 	{
 		System.out.println(super.getName() + "Inizio caricamento files.");
+		Blackboard.StartToLoad.release();
 		File[] files = new File(_path).listFiles();
 		try {
 			GetFiles(files);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Blackboard.LoaderFinished = true;
+		try {
+			Blackboard.filesQueue.put(File.createTempFile("Finish", "end"));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Blackboard.FinishToLoad.release();
 		System.out.println(super.getName() + "Fine caricamento files");
 	}

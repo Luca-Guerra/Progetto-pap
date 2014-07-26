@@ -13,14 +13,13 @@ public class IndexerJPF extends Thread {
 	}
 
 	public void run(){
-		System.out.println("parto");
 		while(true){
 			try {
 				int file;
 				file = BlackboardJPF.filesQueue.take();
 				if(file == -1)
 				{
-					BlackboardJPF.filesQueue.add(-1);
+					BlackboardJPF.filesQueue.put(-1);
 					break;
 				}
 				synchronized(BlackboardJPF.docIndex)
@@ -47,6 +46,5 @@ public class IndexerJPF extends Thread {
 		} catch (BrokenBarrierException e) {
 			e.printStackTrace();
 		}
-		System.out.println("finito");
 	}
 }

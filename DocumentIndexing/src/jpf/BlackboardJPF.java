@@ -20,7 +20,7 @@ public class BlackboardJPF {
 	public static int 					progress 		= 	0;
 	public static boolean 				enableSearch 	= 	false;
 	public static int 					totalWords		=	0;
-	public static BlockingQueue<Integer>filesQueue 		= 	new LinkedBlockingDeque<Integer>(Integer.MAX_VALUE);
+	public static LinkedBlockingDeque<Integer>filesQueue 		= 	new LinkedBlockingDeque<Integer>();
 	public static CyclicBarrier 		indexersBarrier = 	new CyclicBarrier(NTHREADS, new Runnable() {
 																							public void run() { 
 																								exec.shutdown();

@@ -14,10 +14,9 @@ public class ManageIndexerJPF {
 		//Start loader e indexers
 		BlackboardJPF.exec.execute(new FileLoaderJPF("Loader"));
 		BlackboardJPF.StartToLoad.acquire();
-		for(int i=0;i<(BlackboardJPF.NTHREADS-1);i++)
+		for(int i=0;i<(BlackboardJPF.NTHREADS);i++)
 			BlackboardJPF.exec.execute(workers[i]);
-		BlackboardJPF.FinishToLoad.acquire();
-		System.out.println("caricamento finito");
-		BlackboardJPF.exec.execute(workers[BlackboardJPF.NTHREADS-1]);
+		//BlackboardJPF.FinishToLoad.acquire();
+		
 	}
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
+
 import gov.nasa.jpf.vm.Verify;
 
 
@@ -28,10 +29,18 @@ public class Indexer extends Thread {
 			
 			try {
 				File file;
-				if(Blackboard.LoaderFinished && Blackboard.filesQueue.isEmpty())
+				if(Blackboard.filesQueue.isEmpty())
 					break;
 				file = Blackboard.filesQueue.take();
-				
+				if(file.getName().startsWith("Finish") && file.getName().endsWith("end"))
+				{
+					try {
+						Blackboard.filesQueue.put(File.createTempFile("Finish", "end"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					break;
+				}
 				Reader rdr = new Reader(file.getAbsolutePath());
 				System.out.println(super.getName() + ":Aperto file:" + file.getName());
 				try {

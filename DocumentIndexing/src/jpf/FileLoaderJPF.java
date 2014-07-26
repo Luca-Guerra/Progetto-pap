@@ -14,7 +14,6 @@ public class FileLoaderJPF extends Thread {
 		if(files.length <= 0)
 			return;
 		for (int i=0;i <files.length ; i++){
-			System.out.println("inserisco:" + files[i]);
 			BlackboardJPF.filesQueue.put(files[i]);
 		}
 	}
@@ -43,6 +42,6 @@ public class FileLoaderJPF extends Thread {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		BlackboardJPF.FinishToLoad.release();
+		//BlackboardJPF.FinishToLoad.release();
 	}
 }

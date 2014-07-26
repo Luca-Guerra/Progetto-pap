@@ -12,8 +12,8 @@ import java.util.concurrent.Semaphore;
 
 public class Blackboard {
 	public static ExecutorService exec;
-	public static int NTHREADS = Runtime.getRuntime().availableProcessors() + 1;
-	public static boolean 				LoaderFinished 	= 	false;
+	public static int 					NTHREADS 		= 	Runtime.getRuntime().availableProcessors() + 1;
+	public static Semaphore 			StartToLoad 	=	new Semaphore(0,true);
 	public static Semaphore 			FinishToLoad 	= 	new Semaphore(0,true);
 	public static boolean 				pause 			= 	false;
 	public static int 					progress 		= 	0;
@@ -29,7 +29,6 @@ public class Blackboard {
 	public static Hashtable<String, List<String>> docIndex = new Hashtable<String, List<String>>();
 	
 	public static void Reset(){
-		LoaderFinished	=	false;
 		FinishToLoad 	= 	new Semaphore(0,true);
 		pause 			= 	false;
 		progress 		= 	0;

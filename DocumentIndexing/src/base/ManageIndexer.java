@@ -39,6 +39,7 @@ public class ManageIndexer extends SwingWorker<Integer,Integer> {
 		}
 		//Start loader e indexers
 		Blackboard.exec.execute(new FileLoader("Loader",_path));
+		Blackboard.StartToLoad.acquire();
 		for(int i=0;i<workers.length;i++)
 			Blackboard.exec.execute(workers[i]);
 		
