@@ -37,7 +37,7 @@ public class Gui extends JFrame {
 		pathFld.setText("C:\\TestingUniversita");
 	    startBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
-	    		if(!Blackboard.pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){
+	    		if(!Blackboard.pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){	
 	    			finderTask = new ManageIndexer(pathFld.getText());
 	    			finderTask.addPropertyChangeListener(new PropertyChangeListener(){
 	    				public void propertyChange(PropertyChangeEvent evt) {
