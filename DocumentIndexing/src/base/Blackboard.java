@@ -39,6 +39,6 @@ public class Blackboard {
 																exec.shutdown();
 															}
 														});
-		restartSignal 	= 	new CountDownLatch(1);
+		restartSignal 	= 	new CountDownLatch(1); 
 	}
 }
