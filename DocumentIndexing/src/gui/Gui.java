@@ -38,6 +38,7 @@ public class Gui extends JFrame {
 	    startBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		if(!Blackboard.pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){	
+	    			//Start di un nuovo SwingWorker
 	    			finderTask = new ManageIndexer(pathFld.getText());
 	    			finderTask.addPropertyChangeListener(new PropertyChangeListener(){
 	    				public void propertyChange(PropertyChangeEvent evt) {
@@ -47,8 +48,8 @@ public class Gui extends JFrame {
 	    		    });
 	    			finderTask.execute();
 	    			Blackboard.pause = false;
-	    			
 	    		}else{
+	    			//Resume dello SwingWorker in pausa
 	    			finderTask.resume();
 	    			Blackboard.pause = false;
 	    			Blackboard.restartSignal.countDown();
@@ -57,12 +58,14 @@ public class Gui extends JFrame {
 	    }); 
 	    pauseBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
+	    		//Setto lo SwingWorker in pausa
 	    		finderTask.pause();
 	    		Blackboard.pause = true;
 	    	}
 	    });
 	    stopBtn.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
+	    		//Cancello il corrente SwingWorker
 	    		finderTask.cancel(true);
 	    	}
 	    });
@@ -71,6 +74,7 @@ public class Gui extends JFrame {
 	    	public void actionPerformed(ActionEvent e){
 	    		if(Blackboard.enableSearch)
 	    		{
+	    			//Gli indexer hanno terminato i loro lavori
 	    			String[] colNames = {"File"};
 	    			Object [] [] data;
 	    			String[] words = wordFld.getText().split(",");

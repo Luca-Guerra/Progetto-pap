@@ -24,6 +24,12 @@ public class BlackboardJPF {
 	public static CyclicBarrier 		indexersBarrier = 	new CyclicBarrier(NTHREADS, new Runnable() {
 																							public void run() { 
 																								exec.shutdown();
+																								/*
+																								 * Verifico che il numero di file controllati sia
+																								 * effettivamente uguale al numero effettivo dei file, 
+																								 * in questa simulazione 4 
+																								 */
+																								assert progress == 4;
 																							}
 															  		  					});
 	public static CountDownLatch 		restartSignal 	= 	new CountDownLatch(1);

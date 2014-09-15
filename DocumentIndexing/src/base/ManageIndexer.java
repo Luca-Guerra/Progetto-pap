@@ -35,14 +35,18 @@ public class ManageIndexer extends SwingWorker<Integer,Integer> {
 		Indexer[] workers = new Indexer[NTHREADS];
 		for(int i=0;i<workers.length;i++){
 			workers[i]=new Indexer("worker"+i);
-			System.out.println("Creato : worker"+ i + "\r\n");
+			System.out.println("Creato: worker"+ i + "\r\n");
 		}
 		//Start loader e indexers
 		Blackboard.exec.execute(new FileLoader("Loader",_path));
+		//Garantisco che il primo processo a partire sia il Loader 
+		//(altrimenti potevano partire tutti i worker e lui rimanere fuori dall'esecuzione) fixed con JPF
 		Blackboard.StartToLoad.acquire();
 		for(int i=0;i<workers.length;i++)
 			Blackboard.exec.execute(workers[i]);
 		
+		//Ora posso inizare a mostrare l'avanzamento nella barra
+		//prima non potevo perchè non avevo il numero di parole totali
 		Blackboard.FinishToLoad.acquire();
 		
 		int inc=0;
@@ -63,16 +67,19 @@ public class ManageIndexer extends SwingWorker<Integer,Integer> {
 	
 	protected void done(){
 		if(isCancelled()){
+			//Spendo bruscamente il pool
 			Blackboard.exec.shutdownNow();
 			try {
 				Blackboard.exec.awaitTermination(Long.MAX_VALUE,TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			//Resetto la Blackboard per una nuova esecuzione
 			Blackboard.Reset();
 			System.out.println("Indicizzazione cancellata! :(");
 		}else{
 			Blackboard.Reset();
+			//Comunico che è possibile d'ora cercare le parole nell'indicizzazione
 			Blackboard.enableSearch = true;
 			System.out.println("Fine indicizzazione.");
 		}

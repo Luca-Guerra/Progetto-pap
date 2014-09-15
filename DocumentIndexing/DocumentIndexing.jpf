@@ -7,6 +7,7 @@ report.console.property_violation=error,snapshot
 # Overlapping Method Analyzer reports which method is called concurrently by different threads (if any)
 # Coverage Analyzer gives statistics about method invocation
 listener+=,.listener.DeadlockAnalyzer
+listener+= ,.listener.PreciseRaceDetector
 #listener+=,gov.nasa.jpf.aprop.listener.SharedChecker
 #listener+=,.listener.OverlappingMethodAnalyzer
 #listener+=,.listener.CoverageAnalyzer

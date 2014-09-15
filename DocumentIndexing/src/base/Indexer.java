@@ -31,7 +31,9 @@ public class Indexer extends Thread {
 				File file;
 				if(Blackboard.filesQueue.isEmpty())
 					break;
+				//Prendo un file
 				file = Blackboard.filesQueue.take();
+				//Se è la poison pil termino e propago la terminazione in queue
 				if(file.getName().startsWith("Finish") && file.getName().endsWith("end"))
 				{
 					try {

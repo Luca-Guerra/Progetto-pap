@@ -25,7 +25,9 @@ public class FileLoader extends Thread {
 			if(file.isDirectory())
 				GetFiles(file.listFiles());
 			else if(file.getName().contains(".txt")){
+				//Inserisco il file in queue
 				Blackboard.filesQueue.put(file);
+				//Calcolo e inserisco in blackboard il nuomero di parole del file
 				Blackboard.totalWords += GetFileNumWords(file);
 			}
 	}
@@ -48,7 +50,9 @@ public class FileLoader extends Thread {
 	public void run()
 	{
 		System.out.println(super.getName() + "Inizio caricamento files.");
+		//Comunico l'inizio dell'indicizzazione(ovvero l'executor mi ha dato la parola)
 		Blackboard.StartToLoad.release();
+		//Ottengo la lista di file
 		File[] files = new File(_path).listFiles();
 		try {
 			GetFiles(files);
@@ -56,6 +60,7 @@ public class FileLoader extends Thread {
 			e.printStackTrace();
 		}
 		try {
+			//Inserisco in queue la poison pil
 			Blackboard.filesQueue.put(File.createTempFile("Finish", "end"));
 		} catch (InterruptedException e) {
 			e.printStackTrace();

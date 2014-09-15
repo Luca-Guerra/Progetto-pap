@@ -28,8 +28,8 @@ public class FileLoaderJPF extends Thread {
 	{
 		BlackboardJPF.StartToLoad.release();
 		Verify.beginAtomic();
-		int[] files = new int[2];
-		for(int i=0; i<2; i++)
+		int[] files = new int[4];
+		for(int i = 0; i < files.length; i++)
 			files[i] = i;
 		Verify.endAtomic();
 		try {
