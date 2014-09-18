@@ -42,6 +42,5 @@ public class FileLoaderJPF extends Thread {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		//BlackboardJPF.FinishToLoad.release();
 	}
 }

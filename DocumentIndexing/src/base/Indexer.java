@@ -21,6 +21,7 @@ public class Indexer extends Thread {
 			if(Blackboard.pause)
 				try {
 					System.out.println(super.getName() + ":Entro in pausa :)");
+					//Mi metto in attesa sul countdownlatch
 					Blackboard.restartSignal.await();
 					System.out.println(super.getName() + ":Riparto :)");
 				} catch (InterruptedException e) {
@@ -29,11 +30,10 @@ public class Indexer extends Thread {
 			
 			try {
 				File file;
-				if(Blackboard.filesQueue.isEmpty())
-					break;
+				
 				//Prendo un file
 				file = Blackboard.filesQueue.take();
-				//Se è la poison pil termino e propago la terminazione in queue
+				//Se è la poison pill termino e propago la terminazione in queue
 				if(file.getName().startsWith("Finish") && file.getName().endsWith("end"))
 				{
 					try {
@@ -52,7 +52,6 @@ public class Indexer extends Thread {
 						for(String word:words)
 							synchronized(Blackboard.docIndex)
 							{
-								Verify.beginAtomic();
 								List<String> record = Blackboard.docIndex.get(word);
 								if(record == null)
 									record = new ArrayList<String>();
@@ -61,7 +60,6 @@ public class Indexer extends Thread {
 									Blackboard.docIndex.put(word,record);
 								}
 								Blackboard.progress++;
-								Verify.endAtomic();
 							}
 					}
 				} catch (IOException e) {
@@ -72,6 +70,7 @@ public class Indexer extends Thread {
 			}
 		}
 		try {
+			//Attendo la terminazione di tutti gli indexer
 			Blackboard.indexersBarrier.await();
 		} catch (InterruptedException e) {
 			e.printStackTrace();

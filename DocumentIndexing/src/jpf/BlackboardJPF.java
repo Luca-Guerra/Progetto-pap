@@ -25,8 +25,8 @@ public class BlackboardJPF {
 																							public void run() { 
 																								exec.shutdown();
 																								/*
-																								 * Verifico che il numero di file controllati sia
-																								 * effettivamente uguale al numero effettivo dei file, 
+																								 * Verifico che il numero di elementi controllati
+																								 * sia uguale al numero effettivo degli elementi, 
 																								 * in questa simulazione 4 
 																								 */
 																								assert progress == 4;

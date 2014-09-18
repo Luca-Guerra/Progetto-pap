@@ -41,6 +41,7 @@ public class IndexerJPF extends Thread {
 		}
 		try {
 			BlackboardJPF.indexersBarrier.await();
+			System.out.println(BlackboardJPF.progress);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (BrokenBarrierException e) {

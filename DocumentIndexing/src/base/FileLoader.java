@@ -55,18 +55,20 @@ public class FileLoader extends Thread {
 		//Ottengo la lista di file
 		File[] files = new File(_path).listFiles();
 		try {
+			//Carico i file nella queue
 			GetFiles(files);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		try {
-			//Inserisco in queue la poison pil
+			//Inserisco in queue la poison pill
 			Blackboard.filesQueue.put(File.createTempFile("Finish", "end"));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//Comunico il termine del caricamento
 		Blackboard.FinishToLoad.release();
 		System.out.println(super.getName() + "Fine caricamento files");
 	}

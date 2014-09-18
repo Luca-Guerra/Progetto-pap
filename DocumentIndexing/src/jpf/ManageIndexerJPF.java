@@ -16,7 +16,6 @@ public class ManageIndexerJPF {
 		BlackboardJPF.StartToLoad.acquire();
 		for(int i=0;i<(BlackboardJPF.NTHREADS);i++)
 			BlackboardJPF.exec.execute(workers[i]);
-		//BlackboardJPF.FinishToLoad.acquire();
 		
 	}
 }
