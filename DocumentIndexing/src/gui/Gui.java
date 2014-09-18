@@ -40,6 +40,7 @@ public class Gui extends JFrame {
 	    		if(!Blackboard.pause && (finderTask == null || finderTask.isCancelled() || finderTask.isDone())){	
 	    			//Start di un nuovo SwingWorker
 	    			finderTask = new ManageIndexer(pathFld.getText());
+	    			//Aggancio il listener per la progressbar
 	    			finderTask.addPropertyChangeListener(new PropertyChangeListener(){
 	    				public void propertyChange(PropertyChangeEvent evt) {
 	    					if("progress".equals(evt.getPropertyName()))
@@ -78,7 +79,7 @@ public class Gui extends JFrame {
 	    			String[] colNames = {"File"};
 	    			Object [] [] data;
 	    			String[] words = wordFld.getText().split(",");
-	    			
+	    			//Cerco le parole passate
 	    			List<String> res = new ArrayList<String>();
 	    			for(String word:words){
 	    				List<String> files = Blackboard.docIndex.get(word);
@@ -86,6 +87,7 @@ public class Gui extends JFrame {
 	    					for(String file:files)
 	    						res.add(file);
 	    			}
+	    			// Mostro i risultati
 	    			if(res.size() == 0)
 	    				JOptionPane.showMessageDialog(null, "Non è stata trovata nessuna occorrenza per le parole date");
 	    			else{

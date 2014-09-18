@@ -46,7 +46,7 @@ public class Indexer extends Thread {
 				Reader rdr = new Reader(file.getAbsolutePath());
 				System.out.println(super.getName() + ":Aperto file:" + file.getName());
 				try {
-					for(String line : rdr.OpenFile()){
+					for(String line : rdr.GetLines()){
 						//Per ogni linea devo prendere ogni parola
 						String[] words = line.split(" ");
 						for(String word:words)

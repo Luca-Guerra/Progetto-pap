@@ -5,7 +5,9 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+ * Classe helper per lettura file
+ */
 public class Reader {
 
 	private String path;
@@ -14,7 +16,8 @@ public class Reader {
 		path = file_path;
 	}
 
-	public List<String> OpenFile() throws IOException{
+    //Ritorno la lista delle righe presenti nel file
+	public List<String> GetLines() throws IOException{
 		FileReader fr = new FileReader(path);
 		BufferedReader textReader = new BufferedReader(fr);
 		List<String> textData = new ArrayList<String>();

@@ -1,7 +1,11 @@
 package base;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FileLoader extends Thread {
@@ -37,7 +41,8 @@ public class FileLoader extends Thread {
 		int n=0;
 		Reader rdr = new Reader(file.getAbsolutePath());
 		try{
-			for(String line : rdr.OpenFile()){
+			//per ogni riga splitto le parole e le conto
+			for(String line : rdr.GetLines()){
 				String[] words = line.split(" ");
 				n += words.length;	
 			}

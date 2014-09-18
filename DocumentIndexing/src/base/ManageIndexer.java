@@ -55,11 +55,12 @@ public class ManageIndexer extends SwingWorker<Integer,Integer> {
 				Thread.sleep(100);
 				if(Blackboard.totalWords != 0)
 					inc = Math.round(Blackboard.progress * 100/Blackboard.totalWords);
-				setProgress(inc);
+				setProgress(inc);//Comunico la nuova progressione all'evt
 			}else
 				while(Blackboard.pause)
 					Thread.sleep(500);//Polling solution
 		}
+		//Attendo il termine dell'executor
 		Blackboard.exec.awaitTermination(Long.MAX_VALUE,TimeUnit.SECONDS);
 		System.out.println("Parole computate: " + Blackboard.progress);
 		return count;
